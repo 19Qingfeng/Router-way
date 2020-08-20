@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>history</title>
+</head>
+
+<body>
+    <script>
+        // history.pushState("name", "title", "/path");
+
+        // history.replaceState("name", "title", "/path");
+
+        // window.onpopstate = function() {
+        //     console.log("完整路径：", window.location.href);
+        //     console.log("绝对路径", window.location.pathname);
+        //     console.log("Hash路径", window.location.hash);
+        // };
+        history.pushState({
+            color: "red"
+        }, "red", "red");
+        history.back();
+        history.forward();
+        window.onpopstate = function(event) {
+            console.log(event.state, 'state');
+            if (event.state && event.state.color === "red") {
+                document.body.style.color = "red";
+            }
+        };
+    </script>
+</body>
+
+</html>
