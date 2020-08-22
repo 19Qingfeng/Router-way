@@ -110,20 +110,20 @@ const routes = [
     {path: '/', redirect: '/home'}
 ];
 ```
-我们用nginx部署项目，然后在地址栏输入 http://localhost:8080 （这里配置的端口是8080），你会发现地址栏之后会变为http://localhost:8080/home，并且看起来一切正常，似乎路由也可以正常切换而不会发生其他问题（实际上会发生问题，后面会进行讨论）。看起来好像不需要按官网告诉我们的那样配置后端也能实现history模式，但如果你直接在地址栏输入http://localhost:8080/home，你会发现你获得了一个404页面。
+我们用nginx部署项目，然后在地址栏输入 http://localhost:8080 （这里配置的端口是8080），你会发现地址栏之后会变为http://localhost:8080/home， 并且看起来一切正常，似乎路由也可以正常切换而不会发生其他问题（实际上会发生问题，后面会进行讨论）。看起来好像不需要按官网告诉我们的那样配置后端也能实现history模式，但如果你直接在地址栏输入http://localhost:8080/home ，你会发现你获得了一个404页面。
 
-那么http://localhost:8080为什么可以（部分）正常显示呢？道理其实很简单，你访问 http://localhost:8080时 ，静态服务器（这里是nginx）会默认去目标目录（这里为location中root所指定的目录）下寻找index.html（这是nginx在端口后没有额外路径时的默认行为），目标目录下有这个文件吗？有！然后静态服务器返回给你这个文件，配合vue-router进行转发，自然可以（部分）正常显示。
-但如果直接访问http://localhost:8080/home，静态服务器会去目标目录下寻找home文件，目标目录下有这个文件吗？没有！所以自然就404了。
+那么http://localhost:8080 为什么可以（部分）正常显示呢？道理其实很简单，你访问 http://localhost:8080时, 静态服务器（这里是nginx）会默认去目标目录（这里为location中root所指定的目录）下寻找index.html（这是nginx在端口后没有额外路径时的默认行为），目标目录下有这个文件吗？有！然后静态服务器返回给你这个文件，配合vue-router进行转发，自然可以（部分）正常显示。
+但如果直接访问http://localhost:8080/home， 静态服务器会去目标目录下寻找home文件，目标目录下有这个文件吗？没有！所以自然就404了。
 
 + 配置后端
 
-为了达到直接访问http://localhost:8080/home也可以成功的目的，我们需要对后端（这里即nginx）进行一些配置。
+为了达到直接访问http://localhost:8080/home 也可以成功的目的，我们需要对后端（这里即nginx）进行一些配置。
 
 首先想想，要怎样才能达到这个目的呢？
 
 在传统的hash模式中 http://localhost:8080#home ,即使不需要配置，静态服务器始终会去寻找index.html并返回给我们，然后vue-router会获取#后面的字符作为参数，对前端页面进行变换。
 
-类比一下，在history模式中，我们所想要的情况就是：输入http://localhost:8080/home，但最终返回的也是index.html，然后vue-router会获取home作为参数，对前端页面进行变换。那么在nginx中，谁能做到这件事呢？答案就是try_files。
+类比一下，在history模式中，我们所想要的情况就是：输入http://localhost:8080/home, 但最终返回的也是index.html,然后vue-router会获取home作为参数，对前端页面进行变换。那么在nginx中，谁能做到这件事呢？答案就是try_files。
 
 关于nginx配置以及history模式可能遇到的问题可以参考这篇文章[Vue Router history模式的配置方法及其原理](https://segmentfault.com/a/1190000019391139)
 
